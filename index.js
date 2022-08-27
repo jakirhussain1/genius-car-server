@@ -35,39 +35,8 @@ async function run (){
         const insertOrder = await orderCollection.insertOne(newOrder);
         res.send(insertOrder); 
     })
-    function authJwt (req,res,next)
-    {
-        const authHeader =req.headers.authorization;
-        if(!authHeader)
-        {
-            return res.status(401).send({message: "UnAuthorize users"});
-        }
-        const token = authHeader.split(' ')[1];
-        jwt.verify(token,process.env.ACCESS_TOKEN,(err,decoded)=>{
-            if(err)
-            {
-                res.status(403).send({message: "Forbiddrn Access"});
-            }
-            req.decoded = decoded;
-            next()
-        })
-        
-    }
-    app.get("/orders", authJwt, async(req,res)=>{
-        const decodeEmail = req.decoded.email;
-        const email = req.query.email;
-        if(decodeEmail===email)
-        {
+ 
 
-            const query = {email: email};
-            const cursor = orderCollection.find(query);
-            const result = await cursor.toArray();
-            res.send(result);
-        }else{
-            res.status(403).send("Accees forbidden");
-        }
-
-    })
     app.post("/add/services",async(req,res)=>{
         const newService = req.body;
         const addService = await dbcollection.insertOne(newService);
